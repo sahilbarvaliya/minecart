@@ -1,10 +1,17 @@
 # Getting Started with Create React App
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This is a React.js project MineCart
 
-## Available Scripts
+## Prerequisites
 
-In the project directory, you can run:
+* Node.js and npm installed: https://nodejs.org/
+* A code editor or IDE (e.g., Visual Studio Code, WebStorm)
+
+## Installation
+
+1. Clone this repository:
+
+git clone 
 
 ### `npm start`
 

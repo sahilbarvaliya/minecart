@@ -22,7 +22,13 @@ export default function Login() {
     e.preventDefault();
 
     const data = localStorage.getItem("users") || [];
+    console.log(data);
+
+    if (data.length === 0) {
+      return setError("User not found");
+    }
     const users = JSON.parse(data);
+
     const user = users.find(
       (user) => user.email === form.email && user.password === form.password
     );
@@ -50,9 +56,8 @@ export default function Login() {
   return (
     <div className="mx-auto w-1/3 h-screen justify-center items-center	 flex">
       <div className="w-full h-1/2 ">
-        <h1 className="text-3xl font-bold underline text-center mb-8">
-          Login Here
-        </h1>
+        <h1 className="text-3xl font-bold text-center mb-2">MineCart</h1>
+        <h1 className="text-3xl font-bold text-center mb-8">Login Here</h1>
         <form className="flex flex-col space-y-4" onSubmit={handleSumbit}>
           <input
             type="text"
@@ -74,7 +79,17 @@ export default function Login() {
             Login
           </button>
 
-          {error && <p className="text-red-500">{error}</p>}
+          <p className="text-center">
+            Don't have an account?{" "}
+            <span
+              className="text-blue-500 cursor-pointer"
+              onClick={() => navigate("/register")}
+            >
+              Register
+            </span>
+          </p>
+
+          {error && <p className="text-red-500 text-center">{error}</p>}
         </form>
       </div>
     </div>

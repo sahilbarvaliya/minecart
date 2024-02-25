@@ -2,7 +2,8 @@ import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 
 export default function Navbar() {
-  const user = localStorage.getItem("user");
+  const logdinUser = localStorage.getItem("user");
+  const user = JSON.parse(logdinUser);
   const navigate = useNavigate();
 
   return (
@@ -17,11 +18,20 @@ export default function Navbar() {
       >
         {user ? (
           <>
+            {user.role === "admin" && (
+              <Link to="/dashboard" className="mr-4">
+                Dashboard
+              </Link>
+            )}
+
+            <Link to="/products" className="mr-4">
+              Products
+            </Link>
+
             <p
               onClick={() => {
                 localStorage.removeItem("user");
                 navigate("/login");
-
               }}
             >
               Logout

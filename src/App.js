@@ -18,7 +18,42 @@ function App() {
           <Route path="/product/:id" element={<Product />} />
           <Route path="/cart" element={<Cart />} />
           <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="*" element={<h1>Not Found</h1>} />
+          <Route
+            path="*"
+            element={
+              <div className="flex w-full h-screen justify-center items-center">
+                <div>
+                  <h1 className="text-4xl font-bold text-center mb-4">
+                    Welcome to Minecart
+                  </h1>
+                  <Link to="/login" className="text-blue-500 hover:underline">
+                    Go to Login
+                  </Link>
+                  <Link
+                    to="/register"
+                    className="text-blue-500 hover:underline mx-4"
+                  >
+                    Go to Register
+                  </Link>
+                  <Link
+                    to="/products"
+                    className="text-blue-500 hover:underline"
+                  >
+                    Go to Products
+                  </Link>
+                  <Link to="/cart" className="text-blue-500 hover:underline mx-4">
+                    Go to Cart
+                  </Link>
+                  <Link
+                    to="/dashboard"
+                    className="text-blue-500 hover:underline"
+                  >
+                    Go to Dashboard
+                  </Link>
+                </div>
+              </div>
+            }
+          />
         </Routes>
       </BrowserRouter>
       {/* <Login /> */}

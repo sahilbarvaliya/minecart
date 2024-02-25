@@ -4,72 +4,9 @@ import Navbar from "../../../Component/Navbar";
 
 export default function Product() {
   const navigate = useNavigate();
-  const [products, setProducts] = useState([
-    {
-      id: 1,
-      name: "Product 1",
-      price: 100,
-      category: "Electronics",
-      desc: "This is a product 1",
-      img: "https://source.unsplash.com/1600x900/?electronics",
-    },
-    {
-      id: 2,
-      name: "Product 2",
-      price: 100,
-      category: "Clothing",
-      desc: "This is a product 2",
-      img: "https://source.unsplash.com/1600x900/?clothing",
-    },
-    {
-      id: 3,
-      name: "Product 3",
-      price: 100,
-      category: "Food",
-      img: "https://source.unsplash.com/1600x900/?food",
-      desc: "This is a product 3",
-    },
-    {
-      id: 4,
-      name: "Product 4",
-      price: 100,
-      category: "Entertainment",
-      desc: "This is a product 4",
-      img: "https://source.unsplash.com/1600x900/?entertainment",
-    },
-    {
-      id: 5,
-      name: "Product 5",
-      price: 100,
-      category: "Electronics",
-      desc: "This is a product 5",
-      img: "https://source.unsplash.com/1600x900/?electronics",
-    },
-    {
-      id: 6,
-      name: "Product 6",
-      price: 100,
-      category: "Clothing",
-      desc: "This is a product 6",
-      img: "https://source.unsplash.com/1600x900/?clothing",
-    },
-    {
-      id: 7,
-      name: "Product 7",
-      price: 100,
-      category: "Food",
-      desc: "This is a product 7",
-      img: "https://source.unsplash.com/1600x900/?food",
-    },
-    {
-      id: 8,
-      name: "Product 8",
-      price: 100,
-      category: "Entertainment",
-      desc: "This is a product 8",
-      img: "https://source.unsplash.com/1600x900/?entertainment",
-    },
-  ]);
+  const [products, setProducts] = useState(
+    JSON.parse(localStorage.getItem("products")) || []
+  );
   const [qty, setQty] = useState(1);
   let { id } = useParams();
   const product = products.find((product) => product.id === parseInt(id));

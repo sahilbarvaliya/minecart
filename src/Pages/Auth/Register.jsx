@@ -63,12 +63,25 @@ export default function Register() {
 
     // add details in auth.json
     let users = JSON.parse(localStorage.getItem("users")) || [];
-    users.push({
+
+    if (users.find((ur) => ur.email === form.email)) {
+      setError({
+        ...error,
+        email: "Email already exist",
+      });
+      return;
+    }
+
+    const user = {
+      id: users.length + 1,
       name: form.name,
       email: form.email,
       password: form.password,
       role: form.role,
-    });
+    };
+    users.push(user);
+
+    localStorage.setItem("user", JSON.stringify(user));
     localStorage.setItem("users", JSON.stringify(users));
     setForm({
       name: "",
@@ -83,6 +96,14 @@ export default function Register() {
     } else {
       navigate("/products");
     }
+
+    setError({
+      name: "",
+      email: "",
+      password: "",
+      repassword: "",
+      role: "",
+    });
   };
 
   return (
@@ -161,7 +182,13 @@ export default function Register() {
           error.email ||
           error.password ||
           error.role ? (
-            <p className="text-red-500 text-sm">Please fill all the fields</p>
+            <p className="text-red-500 text-sm text-center">
+              {error.repassword ||
+                error.name ||
+                error.email ||
+                error.password ||
+                error.role}
+            </p>
           ) : null}
 
           <p className="text-center">

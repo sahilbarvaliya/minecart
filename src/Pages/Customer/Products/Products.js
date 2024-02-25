@@ -1,156 +1,57 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Navbar from "../../../Component/Navbar";
 import { Link } from "react-router-dom";
 
-const pro = [
-  {
-    id: 1,
-    name: "Product 1",
-    price: 100,
-    category: "Electronics",
-    desc: "This is a product 1",
-    img: "https://source.unsplash.com/1600x900/?electronics",
-  },
-  {
-    id: 2,
-    name: "Product 2",
-    price: 100,
-    category: "Clothing",
-    desc: "This is a product 2",
-    img: "https://source.unsplash.com/1600x900/?clothing",
-  },
-  {
-    id: 3,
-    name: "Product 3",
-    price: 100,
-    category: "Food",
-    img: "https://source.unsplash.com/1600x900/?food",
-    desc: "This is a product 3",
-  },
-  {
-    id: 4,
-    name: "Product 4",
-    price: 100,
-    category: "Entertainment",
-    desc: "This is a product 4",
-    img: "https://source.unsplash.com/1600x900/?entertainment",
-  },
-  {
-    id: 5,
-    name: "Product 5",
-    price: 100,
-    category: "Electronics",
-    desc: "This is a product 5",
-    img: "https://source.unsplash.com/1600x900/?electronics",
-  },
-  {
-    id: 6,
-    name: "Product 6",
-    price: 100,
-    category: "Clothing",
-    desc: "This is a product 6",
-    img: "https://source.unsplash.com/1600x900/?clothing",
-  },
-  {
-    id: 7,
-    name: "Product 7",
-    price: 100,
-    category: "Food",
-    desc: "This is a product 7",
-    img: "https://source.unsplash.com/1600x900/?food",
-  },
-  {
-    id: 8,
-    name: "Product 8",
-    price: 100,
-    category: "Entertainment",
-    desc: "This is a product 8",
-    img: "https://source.unsplash.com/1600x900/?entertainment",
-  },
-];
-
 export default function Products() {
   const [filter, setFilter] = useState("");
-  const [products, setProducts] = useState([
-    {
-      id: 1,
-      name: "Product 1",
-      price: 100,
-      category: "Electronics",
-      desc: "This is a product 1",
-      img: "https://source.unsplash.com/1600x900/?electronics",
-    },
-    {
-      id: 2,
-      name: "Product 2",
-      price: 100,
-      category: "Clothing",
-      desc: "This is a product 2",
-      img: "https://source.unsplash.com/1600x900/?clothing",
-    },
-    {
-      id: 3,
-      name: "Product 3",
-      price: 100,
-      category: "Food",
-      img: "https://source.unsplash.com/1600x900/?food",
-      desc: "This is a product 3",
-    },
-    {
-      id: 4,
-      name: "Product 4",
-      price: 100,
-      category: "Entertainment",
-      desc: "This is a product 4",
-      img: "https://source.unsplash.com/1600x900/?entertainment",
-    },
-    {
-      id: 5,
-      name: "Product 5",
-      price: 100,
-      category: "Electronics",
-      desc: "This is a product 5",
-      img: "https://source.unsplash.com/1600x900/?electronics",
-    },
-    {
-      id: 6,
-      name: "Product 6",
-      price: 100,
-      category: "Clothing",
-      desc: "This is a product 6",
-      img: "https://source.unsplash.com/1600x900/?clothing",
-    },
-    {
-      id: 7,
-      name: "Product 7",
-      price: 100,
-      category: "Food",
-      desc: "This is a product 7",
-      img: "https://source.unsplash.com/1600x900/?food",
-    },
-    {
-      id: 8,
-      name: "Product 8",
-      price: 100,
-      category: "Entertainment",
-      desc: "This is a product 8",
-      img: "https://source.unsplash.com/1600x900/?entertainment",
-    },
-  ]);
+  const [products, setProducts] = useState(
+    JSON.parse(localStorage.getItem("products")) || []
+  );
+  const [sortDirection, setSortDirection] = useState("asc");
+
   const handleSearch = (e) => {
     setFilter(e.target.value);
 
-    const filteredProducts = pro.filter((product) => {
-      return (
-        product.name.toLowerCase().includes(e.target.value.toLowerCase()) ||
-        product.category.toLowerCase().includes(e.target.value.toLowerCase())
-      );
-    });
+    const filteredProducts =
+      JSON.parse(localStorage.getItem("products")).filter((product) => {
+        return (
+          product.name.toLowerCase().includes(e.target.value.toLowerCase()) ||
+          product.category.toLowerCase().includes(e.target.value.toLowerCase())
+        );
+      }) || [];
 
     setProducts(filteredProducts);
     if (e.target.value === "") {
-      setProducts(pro);
+      setProducts(JSON.parse(localStorage.getItem("products")) || []);
     }
+  };
+
+  useEffect(() => {
+    setProducts(JSON.parse(localStorage.getItem("products")) || []);
+  }, []);
+
+  const handleSortClick = () => {
+    const newDirection = sortDirection === "asc" ? "desc" : "asc";
+    const newSortedData = [...products].sort((a, b) => {
+      const priceA = Number(a.price);
+      const priceB = Number(b.price);
+      return newDirection === "asc" ? priceA - priceB : priceB - priceA;
+    });
+    setProducts(newSortedData);
+    setSortDirection(newDirection);
+  };
+
+  const filterByCategory = (category) => {
+    if (category === "") {
+      setProducts(JSON.parse(localStorage.getItem("products")) || []);
+      return;
+    }
+    const filteredProducts = JSON.parse(
+      localStorage.getItem("products")
+    ).filter((product) => {
+      return product.category.toLowerCase() === category.toLowerCase();
+    });
+    setProducts(filteredProducts);
   };
 
   return (
@@ -170,38 +71,107 @@ export default function Products() {
             <button className="bg-blue-500 text-white p-2 rounded-md ml-2">
               Search
             </button>
+            <button
+              onClick={handleSortClick}
+              className="flex justify-center items-center ml-2"
+            >
+              Sort Price:
+              {sortDirection === "asc" ? (
+                <i class="icon-plus-circle text-blue-500 hover:text-blue-700">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-6 w-6"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M19 9l-7 7-7-7"
+                    />
+                  </svg>
+                </i>
+              ) : (
+                <i class="icon-plus-circle text-blue-500 hover:text-blue-700">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-6 w-6"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M5 15l7-7 7 7"
+                    />
+                  </svg>
+                </i>
+              )}
+            </button>
           </div>
         </div>
 
-        <div className="grid grid-cols-4 gap-4 mt-8">
-          {products.map((product, index) => (
-            <Link
-              to={`/product/${product.id}`}
-              key={index}
-              className="bg-gray-200 p-4 rounded-md"
-            >
-              <img
-                src={product.img}
-                alt={product.name}
-                className="w-full h-40 object-cover border-2 rounded-md"
-              />
-              <h1 className="text-2xl font-bold">{product.name}</h1>
-              <p>Price: ${product.price}</p>
-              <p>Category: {product.category}</p>
-              <p>
-                Description:
-                {product.desc.length > 10
-                  ? product.desc.substring(0, 10) + "..."
-                  : product.desc}
-              </p>
-            </Link>
-          ))}
+        <div
+          className="
+          flex items-start justify-between
+        "
+        >
+          {/* side navbar for category sort*/}
+          <div className="flex justify-between flex-col mr-6 items-start ">
+            <h1 className="text-2xl font-bold mb-4">Categories</h1>
 
-          {products.length === 0 && (
-            <h1 className="text-2xl font-bold text-center col-span-4">
-              No Products Found
-            </h1>
-          )}
+            <button onClick={() => filterByCategory("electronics")}>
+              Electronics
+            </button>
+
+            <button onClick={() => filterByCategory("clothing")}>
+              Clothing
+            </button>
+
+            <button onClick={() => filterByCategory("groceries")}>
+              Groceries
+            </button>
+
+            <button onClick={() => filterByCategory("furniture")}>
+              Furniture
+            </button>
+
+            <button onClick={() => filterByCategory("")}>Show All</button>
+          </div>
+          <div className="grid grid-cols-4 gap-4 mt-8 w-full">
+            {products.map((product, index) => (
+              <Link
+                to={`/product/${product.id}`}
+                key={index}
+                className="bg-gray-200 p-4 rounded-md"
+              >
+                <img
+                  src={product.img}
+                  alt={product.name}
+                  className="w-full h-40 object-cover border-2 rounded-md"
+                />
+                <h1 className="text-2xl font-bold">{product.name}</h1>
+                <p>Price: ${product.price}</p>
+                <p>Category: {product.category}</p>
+                <p>
+                  Description:
+                  {product.desc.length > 10
+                    ? product.desc.substring(0, 10) + "..."
+                    : product.desc}
+                </p>
+              </Link>
+            ))}
+
+            {products.length === 0 && (
+              <h1 className="text-2xl font-bold text-center col-span-4">
+                No Products Found
+              </h1>
+            )}
+          </div>
         </div>
       </div>
     </>
